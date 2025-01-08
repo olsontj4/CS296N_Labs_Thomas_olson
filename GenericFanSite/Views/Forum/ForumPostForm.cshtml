@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "New Post";
+}
+@model ForumPost
+<br />
+<section class="text-center">
+    <h1>@ViewData["Title"]</h1>
+</section>
+<hr />
+<article class="d-flex justify-content-center container">
+    <div class="mt-md-3 bg-dark-subtle p-3 col-12 col-md-6">
+        <form class="" method="post">
+            @if (Model != null)
+            {
+                <label class="form-label" for="title">Title:</label>
+                <input class="form-control" id="title" type="text" name="Title" value="@Model.Title"/>
+                <br />
+                <label class="form-label" for="description">Descripton:</label>
+                <textarea class="form-control" id="description" name="Description">@Model.Description</textarea>
+                <br />
+                <label class="form-label" for="text">Your story:</label>
+                <textarea class="form-control" rows="6" id="text" name="Story">@Model.Story</textarea>
+                <br />
+                <label class="form-label" for="year">Year this story happened:</label>
+                <input class="form-control" id="year" type="number" placeholder="2010" name="Year" value="@Model.Year" />
+                <br />
+                <label class="form-label" for="name">Name:</label>
+                <input class="form-control" id="name" type="text" name="User.Name" value="@Model.User.Name" />
+                <p class="text-danger">@ViewBag.RedText</p><!--Text if something goes wrong.-->
+                <button class="btn btn-outline-light" type="submit">Submit</button>
+            }
+            else
+            {
+                <label class="form-label" for="title">Title:</label>
+                <input class="form-control" id="title" type="text" name="Title" />
+                <br />
+                <label class="form-label" for="description">Descripton:</label>
+                <textarea class="form-control" id="description" name="Description"></textarea>
+                <br />
+                <label class="form-label" for="text">Your story:</label>
+                <textarea class="form-control" rows="6" id="text" name="Story"></textarea>
+                <br />
+                <label class="form-label" for="year">Year this story happened:</label>
+                <input class="form-control" id="year" type="number" placeholder="2010" name="Year" />
+                <br />
+                <label class="form-label" for="name">Name:</label>
+                <input class="form-control" id="name" type="text" name="User.Name" />
+                <p class="text-danger"></p>
+                <button class="btn btn-outline-light" type="submit">Submit</button>
+            }
+        </form>
+    </div>
+</article>

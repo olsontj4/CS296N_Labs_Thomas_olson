@@ -1,0 +1,31 @@
+﻿@model Quiz
+
+<article class="container text-center">
+    <form method="post" class="col-8">
+        @for (int i = 0; i < Model.Questions.Count; i++)
+        {
+            <p>@Model.Questions[i].Q</p>
+            <input name="answers" value="@Model.Questions[i].UserA" class="form-control" />
+            if (Model.Questions[i].UserA != "")
+            {
+                if (Model.CheckAnswer(Model.Questions[i]))
+                {
+                    <p class="text-success">Correct!</p>
+                    <p>Answer: @Model.Questions[i].A</p>
+                }
+                else
+                {
+                    <p class="text-danger">WRONG!</p>
+                    <p>Answer: @Model.Questions[i].A</p>
+                }
+            }
+            else
+            {
+                <br />
+                <br />
+            }
+        }
+        <br />
+        <button type="submit" class="btn btn-primary" value="Submit">Submit</button>
+    </form>
+</article>

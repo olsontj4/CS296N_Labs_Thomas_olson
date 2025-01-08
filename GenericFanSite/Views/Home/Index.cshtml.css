@@ -1,0 +1,28 @@
+﻿body {
+
+}
+
+.overlay {
+    position: relative;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 1;
+    transition: .75s ease;
+}
+
+.textOverlay {
+    opacity: 0;
+}
+
+.linkOverlay:hover .overlay {
+    opacity: 0.33;
+}
+
+.linkOverlay:hover .textOverlay {
+    opacity: 100;
+    transition: .75s ease;
+}
