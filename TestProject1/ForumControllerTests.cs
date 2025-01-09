@@ -29,7 +29,7 @@ namespace FanSiteTests
             // Done in the constructor
             // act
             AppUser user1 = new AppUser();
-            user1.Name = "Test";
+            user1.UserName = "Test";
             ForumPost forumPost = new ForumPost();
             forumPost.User = user1;
             var result = controller.ForumPostForm(forumPost);
@@ -54,7 +54,7 @@ namespace FanSiteTests
         public void ForumPostTestValidation()
         {
             AppUser user1 = new AppUser();
-            user1.Name = "Test";
+            user1.UserName = "Test";
             ForumPost forumPost = new ForumPost();
             forumPost.ForumPostId = 0;
             forumPost.Title = "Titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";

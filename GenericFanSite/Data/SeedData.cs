@@ -1,23 +1,31 @@
 ﻿using GenericFanSite.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace GenericFanSite.Data
 {
     public class SeedData
     {
-        public static void Seed(AppDbContext context)
+        public static void Seed(AppDbContext context, IServiceProvider serviceProvider)
         {
+            var userManager = serviceProvider
+                .GetRequiredService<UserManager<AppUser>>();
             if (!context.ForumPosts.Any())  // this is to prevent adding duplicate data
             {
                 // Create User objects
-                AppUser user1 = new AppUser { Name = "Thomasj041" };
-                AppUser user2 = new AppUser { Name = "Than" };
-                AppUser user3 = new AppUser { Name = "Helena" };
-                AppUser user4 = new AppUser { Name = "Brooke" };
+                const string PASSWORD = "yes";
+                AppUser user1 = new AppUser { UserName = "Thomasj041" };
+                var result1 = userManager.CreateAsync(user1, PASSWORD);
+                AppUser user2 = new AppUser { UserName = "Than" };
+                var result2 = userManager.CreateAsync(user2, PASSWORD);
+                AppUser user3 = new AppUser { UserName = "Helena" };
+                var result3 = userManager.CreateAsync(user3, PASSWORD);
+                AppUser user4 = new AppUser { UserName = "Brooke" };
+                var result4 = userManager.CreateAsync(user4, PASSWORD);
                 // Queue up user objects to be saved to the DB
-                context.AppUsers.Add(user1);
+                /*context.AppUsers.Add(user1);
                 context.AppUsers.Add(user2);
                 context.AppUsers.Add(user3);
-                context.AppUsers.Add(user4);
+                context.AppUsers.Add(user4);*/
                 context.SaveChanges();  // Saving adds UserId to User objects
                 ForumPost forumPost1 = new ForumPost
                 {
