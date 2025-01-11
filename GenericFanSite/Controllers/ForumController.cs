@@ -1,6 +1,7 @@
 ﻿using GenericFanSite.Models;
 using Microsoft.AspNetCore.Mvc;
 using GenericFanSite.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GenericFanSite.Controllers
 {
@@ -12,7 +13,7 @@ namespace GenericFanSite.Controllers
             repo = r;
         }
         [HttpGet]
-        public IActionResult Index(ForumSearch data)
+        public IActionResult Index(ForumSearchViewModel data)
         {
             int countFromResults = data.Results;
             if (data.Results == 0)  //Default for number of forum posts displayed is 5.
@@ -57,10 +58,12 @@ namespace GenericFanSite.Controllers
                 return View(data);
             }
         }
+        [Authorize]
         public IActionResult ForumPostForm()
         {
             return View();
         }
+        [Authorize]
         [HttpPost]
         public IActionResult ForumPostForm(ForumPost data)
         {

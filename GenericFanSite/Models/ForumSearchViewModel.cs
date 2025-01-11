@@ -1,6 +1,6 @@
 ﻿namespace GenericFanSite.Models
 {
-    public class ForumSearch
+    public class ForumSearchViewModel
     {
         public String? Name { get; set; }
         public DateTime? Date { get; set; }
