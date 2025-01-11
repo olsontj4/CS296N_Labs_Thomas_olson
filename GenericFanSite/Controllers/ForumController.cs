@@ -8,6 +8,7 @@ namespace GenericFanSite.Controllers
     public class ForumController : Controller
     {
         IForumRepo repo; //Not sure if this should be private or not.
+
         public ForumController(IForumRepo r)
         {
             repo = r;

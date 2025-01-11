@@ -16,10 +16,9 @@ namespace GenericFanSite.Controllers
         }
         // The Register(), LogIn(), and LogOut()methods go here
         [HttpGet]
-        public IActionResult Register(string returnURL = "")
+        public IActionResult Register()
         {
-            var model = new RegisterViewModel { ReturnUrl = returnURL };
-            return View(model);
+            return View();
         }
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
@@ -49,9 +48,32 @@ namespace GenericFanSite.Controllers
             var model = new LoginViewModel { ReturnUrl = returnURL };
             return View(model);
         }
-        public IActionResult LogOut()
+        [HttpPost]
+        public async Task<IActionResult> LogIn(LoginViewModel model)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                var result = await signInManager.PasswordSignInAsync(model.Username, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction("ForumPostForm", "Forum");
+                    }
+                }
+            }
+            ModelState.AddModelError("", "Invalid username/password.");
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> LogOut()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Forum");
         }
     }
 }
