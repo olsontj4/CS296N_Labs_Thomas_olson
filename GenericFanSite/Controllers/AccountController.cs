@@ -8,8 +8,7 @@ namespace GenericFanSite.Controllers
     {
         private UserManager<AppUser> userManager;
         private SignInManager<AppUser> signInManager;
-        public AccountController(UserManager<AppUser> userMngr,
-        SignInManager<AppUser> signInMngr)
+        public AccountController(UserManager<AppUser> userMngr, SignInManager<AppUser> signInMngr)
         {
             userManager = userMngr;
             signInManager = signInMngr;

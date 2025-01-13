@@ -21,6 +21,8 @@ namespace GenericFanSite.Data
                 var result3 = userManager.CreateAsync(user3, PASSWORD);
                 AppUser user4 = new AppUser { UserName = "Brooke" };
                 var result4 = userManager.CreateAsync(user4, PASSWORD);
+                AppUser user5 = new AppUser { UserName = "Brian" };
+                var result5 = userManager.CreateAsync(user5, PASSWORD);
                 // Queue up user objects to be saved to the DB
                 /*context.AppUsers.Add(user1);
                 context.AppUsers.Add(user2);
@@ -63,10 +65,20 @@ namespace GenericFanSite.Data
                     User = user4,
                     Date = DateTime.Parse("11/27/2024")
                 };
+                ForumPost forumPost5 = new ForumPost
+                {
+                    Title = "Cheking out the Site",
+                    Description = "Just looking",
+                    Year = 2024,
+                    Story = "I hadn't heard of the Fosters so this is an interesting site for me since I can learn about a group that is new to me.",
+                    User = user5,
+                    Date = DateTime.Parse("12/7/2024")
+                };
                 context.ForumPosts.Add(forumPost1);  // queues up a review to be added to the DB
                 context.ForumPosts.Add(forumPost2);
                 context.ForumPosts.Add(forumPost3);
                 context.ForumPosts.Add(forumPost4);
+                context.ForumPosts.Add(forumPost5);
                 context.SaveChanges(); // stores all the reviews in the DB
             }
         }
