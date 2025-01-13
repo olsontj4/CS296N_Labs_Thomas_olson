@@ -1,18 +1,20 @@
 ﻿using GenericFanSite.Models;
 using Microsoft.AspNetCore.Mvc;
 using GenericFanSite.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GenericFanSite.Controllers
 {
     public class ForumController : Controller
     {
         IForumRepo repo; //Not sure if this should be private or not.
+
         public ForumController(IForumRepo r)
         {
             repo = r;
         }
         [HttpGet]
-        public IActionResult Index(ForumSearch data)
+        public IActionResult Index(ForumSearchViewModel data)
         {
             int countFromResults = data.Results;
             if (data.Results == 0)  //Default for number of forum posts displayed is 5.
@@ -26,9 +28,9 @@ namespace GenericFanSite.Controllers
             if (data.Filter == "Name")
             {
                 var forumPosts = repo.GetAllForumPosts()
-                    .Where(p => data.Name == null || p.User.Name == data.Name)
+                    .Where(p => data.Name == null || p.User.UserName == data.Name)
                     .Where(p => data.Date == null || p.Date == data.Date)
-                    .OrderBy(p => p.User.Name)
+                    .OrderBy(p => p.User.UserName)
                     .Take(countFromResults)  //Using .Take() to not display every row in the database table.
                     .ToList();
                 data.ForumPosts = forumPosts;
@@ -37,7 +39,7 @@ namespace GenericFanSite.Controllers
             else if (data.Filter == "Date (Oldest)")
             {
                 var forumPosts = repo.GetAllForumPosts()
-                    .Where(p => data.Name == null || p.User.Name == data.Name)
+                    .Where(p => data.Name == null || p.User.UserName == data.Name)
                     .Where(p => data.Date == null || p.Date == data.Date)
                     .OrderBy(p => p.Date)
                     .Take(countFromResults)
@@ -48,7 +50,7 @@ namespace GenericFanSite.Controllers
             else
             {
                 var forumPosts = repo.GetAllForumPosts()
-                    .Where(p => data.Name == null || p.User.Name == data.Name)
+                    .Where(p => data.Name == null || p.User.UserName == data.Name)
                     .Where(p => data.Date == null || p.Date == data.Date)
                     .OrderByDescending(p => p.Date)
                     .Take(countFromResults)
@@ -57,10 +59,12 @@ namespace GenericFanSite.Controllers
                 return View(data);
             }
         }
+        [Authorize]
         public IActionResult ForumPostForm()
         {
             return View();
         }
+        [Authorize]
         [HttpPost]
         public IActionResult ForumPostForm(ForumPost data)
         {

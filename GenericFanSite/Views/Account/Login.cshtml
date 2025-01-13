@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+@model LoginViewModel
+<br />
+<section class="text-center">
+    <h1>@ViewData["Title"]</h1>
+</section>
+<hr />
+<article class="d-flex justify-content-center container">
+    <div class="mt-md-3 bg-dark-subtle p-3 col-12 col-md-6">
+        <form class="" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <label class="form-label" for="username">Username:</label>
+            <input class="form-control" id="username" type="text" asp-for="Username" />
+            <br />
+            <label class="form-label" for="password">Password:</label>
+            <input class="form-control" id="password" type="password" asp-for="Password">
+            <br />
+            <input class="form-check-input" id="rememberMe" type="checkbox" asp-for="RememberMe" />
+            <label class="form-check-label" for="rememberMe">Remember me</label>
+            <p class="text-danger"></p>
+            <button class="btn btn-outline-light" type="submit">Submit</button>
+            <br />
+            <a asp-action="Register" asp-route-returnUrl="@Model.ReturnUrl">Create an account</a>
+        </form>
+    </div>
+</article>
