@@ -20,7 +20,7 @@ namespace GenericFanSite.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterVM model)
         {
             if (ModelState.IsValid)
             {
@@ -44,11 +44,11 @@ namespace GenericFanSite.Controllers
         [HttpGet]
         public IActionResult Login(string returnURL = "")
         {
-            var model = new LoginViewModel { ReturnUrl = returnURL };
+            var model = new LoginVM { ReturnUrl = returnURL };
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> LogIn(LoginViewModel model)
+        public async Task<IActionResult> LogIn(LoginVM model)
         {
             if (ModelState.IsValid)
             {

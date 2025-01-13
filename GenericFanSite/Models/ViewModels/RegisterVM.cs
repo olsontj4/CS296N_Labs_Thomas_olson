@@ -2,7 +2,7 @@
 
 namespace GenericFanSite.Models
 {
-    public class RegisterViewModel
+    public class RegisterVM
     {
         [Required(ErrorMessage = "Please enter a username.")]
         [StringLength(127)]

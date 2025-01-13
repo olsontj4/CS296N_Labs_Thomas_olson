@@ -14,7 +14,7 @@ namespace GenericFanSite.Controllers
             repo = r;
         }
         [HttpGet]
-        public IActionResult Index(ForumSearchViewModel data)
+        public IActionResult Index(ForumSearchVM data)
         {
             int countFromResults = data.Results;
             if (data.Results == 0)  //Default for number of forum posts displayed is 5.

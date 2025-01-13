@@ -2,7 +2,7 @@
 
 namespace GenericFanSite.Models
 {
-    public class LoginViewModel
+    public class LoginVM
     {
         public string? ReturnUrl { get; internal set; }
         [Required(ErrorMessage = "Please enter a username.")]
