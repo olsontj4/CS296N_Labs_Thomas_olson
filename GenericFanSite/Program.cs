@@ -29,7 +29,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseAuthorization();
@@ -44,7 +43,7 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider
         .GetRequiredService<AppDbContext>();
-    SeedData.Seed(context, scope.ServiceProvider);
+    await SeedData.Seed(context, scope.ServiceProvider);
 }
 
 app.Run();
