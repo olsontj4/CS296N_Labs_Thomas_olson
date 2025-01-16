@@ -61,7 +61,7 @@ namespace GenericFanSite.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("ForumPostForm", "Forum");
+                        return RedirectToAction("Index", "Forum");
                     }
                 }
             }

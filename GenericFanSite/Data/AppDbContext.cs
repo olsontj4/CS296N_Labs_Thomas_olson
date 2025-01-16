@@ -11,6 +11,5 @@ namespace GenericFanSite.Data
            DbContextOptions<AppDbContext> options) : base(options) { }
         // one DbSet for each domain model class
         public DbSet<ForumPost> ForumPosts { get; set; }
-        //public DbSet<AppUser> AppUsers { get; set; }
     }
 }
