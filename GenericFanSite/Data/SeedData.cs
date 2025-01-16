@@ -24,22 +24,6 @@ namespace GenericFanSite.Data
                         throw new Exception($"Failed to create user {userNames[i]}: {string.Join(", ", result.Errors.Select(e => e.Description))}");
                     }
                 }
-                /*AppUser user1 = new AppUser { UserName = "Thomasj041" };
-                var result1 = userManager.CreateAsync(user1, PASSWORD);
-                AppUser user2 = new AppUser { UserName = "Than" };
-                var result2 = userManager.CreateAsync(user2, PASSWORD);
-                AppUser user3 = new AppUser { UserName = "Helena" };
-                var result3 = userManager.CreateAsync(user3, PASSWORD);
-                AppUser user4 = new AppUser { UserName = "Brooke" };
-                var result4 = userManager.CreateAsync(user4, PASSWORD);
-                AppUser user5 = new AppUser { UserName = "Brian" };
-                var result5 = userManager.CreateAsync(user5, PASSWORD);*/
-                // Queue up user objects to be saved to the DB
-                /*context.AppUsers.Add(user1);
-                context.AppUsers.Add(user2);
-                context.AppUsers.Add(user3);
-                context.AppUsers.Add(user4);*/
-                context.SaveChanges();  // Saving adds UserId to User objects
                 ForumPost forumPost1 = new ForumPost
                 {
                     Title = "Cool new album!",
