@@ -1,4 +1,6 @@
 using GenericFanSite.Data;
+using GenericFanSite.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -7,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IForumRepo, ForumRepo>();
+builder.Services.AddIdentity<AppUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 
 var connectionString = builder.Configuration.GetConnectionString("MySqlConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -24,10 +29,10 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllerRoute(
     name: "default",
@@ -36,9 +41,9 @@ app.MapControllerRoute(
 // Get a DbContext object
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider
+    var context = scope.ServiceProvider
         .GetRequiredService<AppDbContext>();
-    SeedData.Seed(dbContext);
+    await SeedData.Seed(context, scope.ServiceProvider);
 }
 
 app.Run();
