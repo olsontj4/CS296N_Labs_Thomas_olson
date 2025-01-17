@@ -32,7 +32,7 @@ namespace FanSiteTests
             user1.UserName = "Test";
             ForumPost forumPost = new ForumPost();
             forumPost.User = user1;
-            var result = controller.ForumPostForm(forumPost);
+            var result = controller.ForumPostFormAsync(forumPost);
             // assert
             // Check to see if I got a RedirectToActionResult
             output.WriteLine(result.ToString());
@@ -44,7 +44,7 @@ namespace FanSiteTests
             // arrange
             // Done in the constructor
             // act
-            var result = controller.ForumPostForm(null);
+            var result = controller.ForumPostFormAsync(null);
             // assert
             // Check to see if I got a RedirectToActionResult
             output.WriteLine(result.ToString());
@@ -60,7 +60,7 @@ namespace FanSiteTests
             forumPost.Title = "Titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
             forumPost.User = user1;
 
-            var result = controller.ForumPostForm(forumPost);
+            var result = controller.ForumPostFormAsync(forumPost);
             output.WriteLine(result.ToString());
             Assert.True(result.GetType() == typeof(ViewResult));
         }

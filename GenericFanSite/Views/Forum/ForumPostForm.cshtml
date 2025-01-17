@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppUser> signInManager
+@{
     ViewData["Title"] = "New Post";
 }
 @model ForumPost
@@ -24,8 +26,6 @@
                 <label class="form-label" for="year">Year this story happened:</label>
                 <input class="form-control" id="year" type="number" placeholder="2010" name="Year" value="@Model.Year" />
                 <br />
-                <label class="form-label" for="name">Name:</label>
-                <input class="form-control" id="name" type="text" name="User.Name" value="@Model.User.UserName" />
                 <p class="text-danger">@ViewBag.RedText</p><!--Text if something goes wrong.-->
                 <button class="btn btn-outline-light" type="submit">Submit</button>
             }
@@ -43,8 +43,6 @@
                 <label class="form-label" for="year">Year this story happened:</label>
                 <input class="form-control" id="year" type="number" placeholder="2010" name="Year" />
                 <br />
-                <label class="form-label" for="name">Name:</label>
-                <input class="form-control" id="name" type="text" name="User.Name" />
                 <p class="text-danger"></p>
                 <button class="btn btn-outline-light" type="submit">Submit</button>
             }
