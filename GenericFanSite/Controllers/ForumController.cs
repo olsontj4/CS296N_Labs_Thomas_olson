@@ -92,8 +92,6 @@ namespace GenericFanSite.Controllers
                     return View(data);
                 }
             }
-            var allErrors = ModelState.Where(e => e.Value.Errors.Count > 0).ToList();
-            ViewBag.RedText = allErrors[0].Value.Errors[0].ErrorMessage.ToString();  //I am doing a bad.  Error messages work though, so I don't care.  Thank you, Stack Overflow.
             return View(data);
         }
     }
