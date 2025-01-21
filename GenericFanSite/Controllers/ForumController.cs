@@ -71,7 +71,7 @@ namespace GenericFanSite.Controllers
         public IActionResult ForumPostForm(ForumPost data)
         {
             data.User = userManager.GetUserAsync(User).Result;
-            ModelState.Remove(nameof(data.User));
+            ModelState.Remove(nameof(data.User));  //Ignoring user validation for now since you need to be logged in anyway to get here.
             if (ModelState.IsValid)
             {
                 try
