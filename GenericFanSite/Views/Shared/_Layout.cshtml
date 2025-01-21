@@ -7,6 +7,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - FTP Fan Site</title>
+    <link rel="stylesheet" href="~/lib/font-awesome/css/fontawesome.min.css"/>
+    <link href="~/lib/font-awesome/css/v5-font-face.css" rel="stylesheet" />
+    <script defer src="~/lib/font-awesome/js/fontawesome.js"></script>
+    <script defer src="~/lib/font-awesome/js/solid.js"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/GenericFanSite.styles.css" asp-append-version="true" />
@@ -39,13 +43,15 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Archive" asp-action="Index">Archive</a>
                         </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto pe-2">
                         @if (signInManager.IsSignedIn(User))
                         {
                         // signed-in user - Log Out button and username
                             <li class="nav-item">
-                                <form method="post" asp-action="Logout" asp-controller="Account" asp-area="">
-                                    <input type="submit" value="Log Out" class="btn btn-outline-light" />
-                                    <span class="text-light">@User.Identity.Name</span>
+                                <form method="post" asp-action="Logout" asp-controller="Account">
+                                    <input type="submit" value="Log Out" class="btn btn-outline-dark" />
+                                    <span class="text-dark">@User.Identity.Name</span>
                                 </form>
                             </li>
                         }
@@ -55,10 +61,10 @@
                             var action = ViewContext.RouteData.Values["action"]?.ToString();
                             // anonymous user - Register link and Log In button
                             <li class="nav-item">
-                                <a asp-action="Register" asp-controller="Account" asp-area="" class="nav-link">Register</a>
+                                <a class="nav-link text-dark" asp-action="Register" asp-controller="Account"><i class="fas fa-edit"></i>&nbsp; Register</a>
                             </li>
                             <li class="nav-item">
-                                <a asp-action="Login" asp-controller="Account" asp-area="" class="btn btn-outline-light">Log In</a>
+                                <a class="btn btn-outline-dark" asp-action="Login" asp-controller="Account">Log In</a>
                             </li>
                         }
                     </ul>
