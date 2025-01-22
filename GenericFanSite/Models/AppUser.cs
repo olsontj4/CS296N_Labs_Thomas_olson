@@ -8,6 +8,6 @@ namespace GenericFanSite.Models
     {
         public DateTime SignUpDate { get; set; }
         [NotMapped]
-        public IList<string> RoleNames { get; set; }
+        public IList<string>? RoleNames { get; set; }
     }
 }
