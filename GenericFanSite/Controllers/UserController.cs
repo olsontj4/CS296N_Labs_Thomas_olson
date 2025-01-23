@@ -35,7 +35,7 @@ namespace GenericFanSite.Controllers
         [HttpGet]
         public IActionResult Add()  //Renders the form for adding users
         {
-            return View();
+            return RedirectToAction("Register", "Account");
         }
         [HttpPost]
         public async Task<IActionResult> Add(RegisterVM model)  //Adds a user
@@ -60,14 +60,23 @@ namespace GenericFanSite.Controllers
             return View(model);
         }
         [HttpDelete]
-        public IActionResult Delete(string userName)  //Removes a user
+        public async Task<IActionResult> Delete(string userName)  //Removes a user
         {
-            return View();
+            return View("Index");
         }
         [HttpPut]
-        public IActionResult AddToAdmin(string userName)  //Adds a user to the "Admin" role
+        public async Task<IActionResult> AddToAdmin(string id)  //Adds a user to the "Admin" role
         {
-            return View();
+            AppUser user = await _userManager.FindByIdAsync(id);
+            var result = await _userManager.AddToRoleAsync(user, "Admin");
+            if (result.Succeeded)
+            {
+                return View();
+            }
+            else
+            {
+                throw new Exception();
+            }
         }
         [HttpPut]
         public IActionResult RemoveFromAdmin(string userName)  //Removes a user from the "Admin" role
@@ -75,14 +84,31 @@ namespace GenericFanSite.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult CreateAdminRole()  //Creates the "Admin" role
+        public async Task<IActionResult> CreateAdminRole()  //Creates the "Admin" role
         {
-            return View();
+            var result = await _roleManager.CreateAsync(new IdentityRole("Admin"));
+            if (result.Succeeded)
+            {
+                return View();
+            }
+            else
+            {
+                throw new Exception();
+            }
         }
         [HttpDelete]
-        public IActionResult DeleteRole(string role)  //Removes a role
+        public async Task<IActionResult> DeleteRole(string id)  //Removes a role
         {
-            return View();
+            IdentityRole role = await _roleManager.FindByIdAsync(id);
+            var result = await _roleManager.DeleteAsync(role);
+            if (result.Succeeded)
+            {
+                return View();
+            }
+            else
+            {
+                throw new Exception();
+            }
         }
     }
 }
