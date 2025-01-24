@@ -59,56 +59,60 @@ namespace GenericFanSite.Controllers
             }
             return View(model);
         }
-        [HttpDelete]
-        public async Task<IActionResult> Delete(string userName)  //Removes a user
-        {
-            return View("Index");
-        }
-        [HttpPut]
-        public async Task<IActionResult> AddToAdmin(string id)  //Adds a user to the "Admin" role
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)  //Removes a user
         {
             AppUser user = await _userManager.FindByIdAsync(id);
-            var result = await _userManager.AddToRoleAsync(user, "Admin");
-            if (result.Succeeded)
+            if (user != null)
             {
-                return View();
+                IdentityResult result = await _userManager.DeleteAsync(user);
+                if (!result.Succeeded)
+                { // if failed
+                    string errorMessage = "";
+                    foreach (IdentityError error in result.Errors)
+                    {
+                        errorMessage += error.Description + " | ";
+                    }
+                    TempData["message"] = errorMessage;
+                }
+            }
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddToAdmin(string id)  //Adds a user to the "Admin" role
+        {
+            IdentityRole adminRole = await _roleManager.FindByNameAsync("Admin");
+            if (adminRole == null)
+            {
+                TempData["message"] = "Admin role does not exist. "
+                + "Click 'Create Admin Role' button to create it.";
             }
             else
             {
-                throw new Exception();
+                AppUser user = await _userManager.FindByIdAsync(id);
+                await _userManager.AddToRoleAsync(user, adminRole.Name);
             }
+            return RedirectToAction("Index");
         }
-        [HttpPut]
-        public IActionResult RemoveFromAdmin(string userName)  //Removes a user from the "Admin" role
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromAdmin(string id)  //Removes a user from the "Admin" role
         {
-            return View();
+            AppUser user = await _userManager.FindByIdAsync(id);
+            await _userManager.RemoveFromRoleAsync(user, "Admin");
+            return RedirectToAction("Index");
         }
         [HttpPost]
         public async Task<IActionResult> CreateAdminRole()  //Creates the "Admin" role
         {
-            var result = await _roleManager.CreateAsync(new IdentityRole("Admin"));
-            if (result.Succeeded)
-            {
-                return View();
-            }
-            else
-            {
-                throw new Exception();
-            }
+            await _roleManager.CreateAsync(new IdentityRole("Admin"));
+            return RedirectToAction("Index");
         }
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> DeleteRole(string id)  //Removes a role
         {
             IdentityRole role = await _roleManager.FindByIdAsync(id);
-            var result = await _roleManager.DeleteAsync(role);
-            if (result.Succeeded)
-            {
-                return View();
-            }
-            else
-            {
-                throw new Exception();
-            }
+            await _roleManager.DeleteAsync(role);
+            return RedirectToAction("Index");
         }
     }
 }

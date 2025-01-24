@@ -74,5 +74,10 @@ namespace GenericFanSite.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Forum");
         }
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }
