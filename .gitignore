@@ -400,3 +400,4 @@ FodyWeavers.xsd
 *.sln.iml
 /GenericFanSite/appsettings.Development.json
 /GenericFanSite/appsettings.Production.json
+/GenericFanSite/appsettings.Production.json
