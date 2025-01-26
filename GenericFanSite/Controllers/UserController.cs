@@ -5,11 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GenericFanSite.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
         private UserManager<AppUser> _userManager;
-        private SignInManager<AppUser> _signInManager;
         private RoleManager<IdentityRole> _roleManager;
         public UserController(UserManager<AppUser> userMngr, RoleManager<IdentityRole> roleMngr)
         {
@@ -35,19 +34,18 @@ namespace GenericFanSite.Controllers
         [HttpGet]
         public IActionResult Add()  //Renders the form for adding users
         {
-            return RedirectToAction("Register", "Account");
+            return View();
         }
         [HttpPost]
         public async Task<IActionResult> Add(RegisterVM model)  //Adds a user
         {
             if (ModelState.IsValid)
             {
-                var appUser = new AppUser { UserName = model.Username };
-                var result = await _userManager.CreateAsync(appUser, model.Password);
+                var user = new AppUser { UserName = model.Username };
+                var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(appUser, isPersistent: false);
-                    return RedirectToAction("ForumPostForm", "Forum");
+                    return RedirectToAction("Index");
                 }
                 else
                 {
