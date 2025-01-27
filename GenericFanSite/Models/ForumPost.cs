@@ -18,7 +18,7 @@ namespace GenericFanSite.Models
         [StringLength(1000, ErrorMessage = "Max length of story is 1000 characters.")]
         public string? Story { get; set;}
         [Required]
-        public AppUser? User { get; set;}
+        public AppUser User { get; set;}
         public DateTime Date { get; set;}
     }
 }
