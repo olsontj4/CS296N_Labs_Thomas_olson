@@ -6,12 +6,12 @@ namespace GenericFanSite.Controllers
 {
     public class AccountController : Controller
     {
-        private UserManager<AppUser> userManager;
-        private SignInManager<AppUser> signInManager;
+        private UserManager<AppUser> _userManager;
+        private SignInManager<AppUser> _signInManager;
         public AccountController(UserManager<AppUser> userMngr, SignInManager<AppUser> signInMngr)
         {
-            userManager = userMngr;
-            signInManager = signInMngr;
+            _userManager = userMngr;
+            _signInManager = signInMngr;
         }
         // The Register(), LogIn(), and LogOut()methods go here
         [HttpGet]
@@ -25,10 +25,10 @@ namespace GenericFanSite.Controllers
             if (ModelState.IsValid)
             {
                 var user = new AppUser { UserName = model.Username };
-                var result = await userManager.CreateAsync(user, model.Password);
+                var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await signInManager.SignInAsync(user, isPersistent: false);
+                    await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("ForumPostForm", "Forum");
                 }
                 else
@@ -52,7 +52,7 @@ namespace GenericFanSite.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await signInManager.PasswordSignInAsync(model.Username, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
@@ -71,8 +71,13 @@ namespace GenericFanSite.Controllers
         [HttpPost]
         public async Task<IActionResult> LogOut()
         {
-            await signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Forum");
+        }
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }

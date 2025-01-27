@@ -41,8 +41,8 @@ app.MapControllerRoute(
 // Get a DbContext object
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider
-        .GetRequiredService<AppDbContext>();
+    await SeedUsers.CreateAdminUserAsync(scope.ServiceProvider);
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await SeedData.Seed(context, scope.ServiceProvider);
 }
 

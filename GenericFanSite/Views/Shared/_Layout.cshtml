@@ -47,7 +47,15 @@
                     <ul class="navbar-nav ms-auto pe-2">
                         @if (signInManager.IsSignedIn(User))
                         {
-                        // signed-in user - Log Out button and username
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="User" asp-action="Index">
+                                        <span class="fas fa-cog"></span>&nbsp;Admin
+                                    </a>
+                                </li>
+                            }
+                            // signed-in user - Log Out button and username
                             <li class="nav-item">
                                 <form method="post" asp-action="Logout" asp-controller="Account">
                                     <input type="submit" value="Log Out" class="btn btn-outline-dark" />
