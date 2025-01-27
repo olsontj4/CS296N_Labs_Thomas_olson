@@ -1,8 +1,12 @@
 ﻿using GenericFanSite.Controllers;
 using GenericFanSite.Data;
 using GenericFanSite.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Xunit.Abstractions;
 
 namespace FanSiteTests
@@ -12,12 +16,10 @@ namespace FanSiteTests
         private readonly ITestOutputHelper output;  // Console logging.
         IForumRepo repo = new FakeForumRepo();
         ForumController controller;
-        private UserManager<AppUser> userMngr;
-
         public ForumControllerTests(ITestOutputHelper output)
         {
             this.output = output;
-            controller = new ForumController(repo, userMngr);
+            controller = new ForumController(repo);
         }
         
         [Fact]

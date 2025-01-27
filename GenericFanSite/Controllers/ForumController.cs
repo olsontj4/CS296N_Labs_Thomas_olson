@@ -2,17 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 using GenericFanSite.Data;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 
 namespace GenericFanSite.Controllers
 {
     public class ForumController : Controller
     {
-        private IForumRepo repo;
-        private UserManager<AppUser> userManager;
-        public ForumController(IForumRepo r, UserManager<AppUser> userMngr)
+        IForumRepo repo; //Not sure if this should be private or not.
+
+        public ForumController(IForumRepo r)
         {
-            userManager = userMngr;
             repo = r;
         }
         [HttpGet]
@@ -70,8 +68,6 @@ namespace GenericFanSite.Controllers
         [HttpPost]
         public IActionResult ForumPostForm(ForumPost data)
         {
-            data.User = userManager.GetUserAsync(User).Result;
-            ModelState.Remove(nameof(data.User));  //Ignoring user validation for now since you need to be logged in anyway to get here.
             if (ModelState.IsValid)
             {
                 try
@@ -92,6 +88,8 @@ namespace GenericFanSite.Controllers
                     return View(data);
                 }
             }
+            var allErrors = ModelState.Where(e => e.Value.Errors.Count > 0).ToList();
+            ViewBag.RedText = allErrors[0].Value.Errors[0].ErrorMessage.ToString();  //I am doing a bad.  Error messages work though, so I don't care.  Thank you, Stack Overflow.
             return View(data);
         }
     }
