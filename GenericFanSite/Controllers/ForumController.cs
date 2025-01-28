@@ -29,14 +29,12 @@ namespace GenericFanSite.Controllers
             }
             if (data.Filter == "Name")
             {
-                var forumPosts = repo.GetAllForumPosts()
+                data.ForumPosts = repo.GetAllForumPosts()
                     .Where(p => data.Name == null || p.User.UserName == data.Name)
                     .Where(p => data.Date == null || p.Date == data.Date)
                     .OrderBy(p => p.User.UserName)
                     .Take(countFromResults)  //Using .Take() to not display every row in the database table.
                     .ToList();
-                data.ForumPosts = forumPosts;
-                return View(data);
             }
             else if (data.Filter == "Date (Oldest)")
             {
@@ -47,7 +45,6 @@ namespace GenericFanSite.Controllers
                     .Take(countFromResults)
                     .ToList();
                 data.ForumPosts = forumPosts;
-                return View(data);
             }
             else
             {
@@ -58,9 +55,10 @@ namespace GenericFanSite.Controllers
                     .Take(countFromResults)
                     .ToList();
                 data.ForumPosts = forumPosts;
-                return View(data);
             }
+            return View(data);
         }
+        /*private IQueryable */
         [Authorize]
         public IActionResult ForumPostForm()
         {
@@ -70,7 +68,11 @@ namespace GenericFanSite.Controllers
         [HttpPost]
         public IActionResult ForumPostForm(ForumPost data)
         {
-            data.User = userManager.GetUserAsync(User).Result;
+            if (data == null)
+            {
+                return View();
+            }
+            data.User = userManager?.GetUserAsync(User).Result;
             ModelState.Remove(nameof(data.User));  //Ignoring user validation for now since you need to be logged in anyway to get here.
             if (ModelState.IsValid)
             {

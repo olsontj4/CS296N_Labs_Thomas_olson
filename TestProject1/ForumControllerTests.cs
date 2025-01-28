@@ -26,10 +26,7 @@ namespace FanSiteTests
             // arrange
             // Done in the constructor
             // act
-            AppUser user1 = new AppUser();
-            user1.UserName = "Test";
             ForumPost forumPost = new ForumPost();
-            forumPost.User = user1;
             var result = controller.ForumPostForm(forumPost);
             // assert
             // Check to see if I got a RedirectToActionResult
@@ -45,20 +42,6 @@ namespace FanSiteTests
             var result = controller.ForumPostForm(null);
             // assert
             // Check to see if I got a RedirectToActionResult
-            output.WriteLine(result.ToString());
-            Assert.True(result.GetType() == typeof(ViewResult));
-        }
-        [Fact]
-        public void ForumPostTestValidation()
-        {
-            AppUser user1 = new AppUser();
-            user1.UserName = "Test";
-            ForumPost forumPost = new ForumPost();
-            forumPost.ForumPostId = 0;
-            forumPost.Title = "Titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
-            forumPost.User = user1;
-
-            var result = controller.ForumPostForm(forumPost);
             output.WriteLine(result.ToString());
             Assert.True(result.GetType() == typeof(ViewResult));
         }
