@@ -17,7 +17,7 @@ namespace GenericFanSite.Data
         int IForumRepo.StoreForumPost(ForumPost model)
         {
             int status = 0;
-            if (model != null && model.User != null)
+            if (model != null)
             {
                 model.Date = DateTime.Now;
                 model.ForumPostId = forumPosts.Count + 1;
