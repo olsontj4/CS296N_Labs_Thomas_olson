@@ -63,15 +63,22 @@ namespace GenericFanSite.Controllers
             AppUser user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
-                IdentityResult result = await _userManager.DeleteAsync(user);
-                if (!result.Succeeded)
-                { // if failed
-                    string errorMessage = "";
-                    foreach (IdentityError error in result.Errors)
-                    {
-                        errorMessage += error.Description + " | ";
+                if (!(_userManager.IsInRoleAsync(user, "Admin").Result))  //Can't delete any admin user.
+                {
+                    IdentityResult result = await _userManager.DeleteAsync(user);
+                    if (!result.Succeeded)
+                    { // if failed
+                        string errorMessage = "";
+                        foreach (IdentityError error in result.Errors)
+                        {
+                            errorMessage += error.Description + " | ";
+                        }
+                        TempData["message"] = errorMessage;
                     }
-                    TempData["message"] = errorMessage;
+                }
+                else
+                {
+                    TempData["message"] = "Can't delete an admin user.";
                 }
             }
             return RedirectToAction("Index");
@@ -100,16 +107,19 @@ namespace GenericFanSite.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
-        public async Task<IActionResult> CreateAdminRole()  //Creates the "Admin" role
+        public async Task<IActionResult> CreateRole(string roleName)  //Creates the "Admin" role
         {
-            await _roleManager.CreateAsync(new IdentityRole("Admin"));
+            await _roleManager.CreateAsync(new IdentityRole(roleName));
             return RedirectToAction("Index");
         }
         [HttpPost]
         public async Task<IActionResult> DeleteRole(string id)  //Removes a role
         {
             IdentityRole role = await _roleManager.FindByIdAsync(id);
-            await _roleManager.DeleteAsync(role);
+            if (role.Name != "Admin")  //Can't delete admin role.
+            {
+                await _roleManager.DeleteAsync(role);
+            }
             return RedirectToAction("Index");
         }
     }
