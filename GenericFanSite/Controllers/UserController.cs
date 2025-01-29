@@ -63,15 +63,22 @@ namespace GenericFanSite.Controllers
             AppUser user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
-                IdentityResult result = await _userManager.DeleteAsync(user);
-                if (!result.Succeeded)
-                { // if failed
-                    string errorMessage = "";
-                    foreach (IdentityError error in result.Errors)
-                    {
-                        errorMessage += error.Description + " | ";
+                if (!(_userManager.IsInRoleAsync(user, "Admin").Result))  //Can't delete any admin user.
+                {
+                    IdentityResult result = await _userManager.DeleteAsync(user);
+                    if (!result.Succeeded)
+                    { // if failed
+                        string errorMessage = "";
+                        foreach (IdentityError error in result.Errors)
+                        {
+                            errorMessage += error.Description + " | ";
+                        }
+                        TempData["message"] = errorMessage;
                     }
-                    TempData["message"] = errorMessage;
+                }
+                else
+                {
+                    TempData["message"] = "Can't delete an admin user.";
                 }
             }
             return RedirectToAction("Index");
@@ -109,7 +116,10 @@ namespace GenericFanSite.Controllers
         public async Task<IActionResult> DeleteRole(string id)  //Removes a role
         {
             IdentityRole role = await _roleManager.FindByIdAsync(id);
-            await _roleManager.DeleteAsync(role);
+            if (role.Name != "Admin")
+            {
+                await _roleManager.DeleteAsync(role);  //Can't delete admin role.
+            }
             return RedirectToAction("Index");
         }
     }

@@ -10,10 +10,15 @@ namespace GenericFanSite.Models
             var userManager = provider.GetRequiredService<UserManager<AppUser>>();
             string username = "admin";
             string password = "Secret!123";
-            string roleName = "Admin";
-            if (await roleManager.FindByNameAsync(roleName) == null)  // if role doesn't exist, create it
+            string roleName1 = "Admin";
+            string roleName2 = "Verified";
+            if (await roleManager.FindByNameAsync(roleName1) == null)  // if role doesn't exist, create it
             {
-                await roleManager.CreateAsync(new IdentityRole(roleName));
+                await roleManager.CreateAsync(new IdentityRole(roleName1));
+            }
+            if (await roleManager.FindByNameAsync(roleName2) == null)
+            {
+                await roleManager.CreateAsync(new IdentityRole(roleName2));
             }
             if (await userManager.FindByNameAsync(username) == null)  // if username doesn't exist, create it and add to role
             {
@@ -21,7 +26,7 @@ namespace GenericFanSite.Models
                 var result = await userManager.CreateAsync(appUser, password);
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(appUser, roleName);
+                    await userManager.AddToRoleAsync(appUser, roleName1);
                 }
             }
         }
