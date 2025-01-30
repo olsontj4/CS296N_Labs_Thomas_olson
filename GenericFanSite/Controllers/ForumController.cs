@@ -66,13 +66,16 @@ namespace GenericFanSite.Controllers
         }
         [Authorize]
         [HttpPost]
-        public IActionResult ForumPostForm(ForumPost data)
+        public async Task<IActionResult> ForumPostForm(ForumPost data)
         {
             if (data == null)
             {
                 return View();
             }
-            data.User = userManager?.GetUserAsync(User).Result;
+            if (userManager != null)  //Allowing null user only for unit testing.
+            {
+                data.User = await userManager.GetUserAsync(User);
+            }
             ModelState.Remove(nameof(data.User));  //Ignoring user validation for now since you need to be logged in anyway to get here.
             if (ModelState.IsValid)
             {
