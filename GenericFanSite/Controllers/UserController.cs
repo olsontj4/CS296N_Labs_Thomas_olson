@@ -107,18 +107,18 @@ namespace GenericFanSite.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
-        public async Task<IActionResult> CreateAdminRole()  //Creates the "Admin" role
+        public async Task<IActionResult> CreateRole(string roleName)  //Creates the "Admin" role
         {
-            await _roleManager.CreateAsync(new IdentityRole("Admin"));
+            await _roleManager.CreateAsync(new IdentityRole(roleName));
             return RedirectToAction("Index");
         }
         [HttpPost]
         public async Task<IActionResult> DeleteRole(string id)  //Removes a role
         {
             IdentityRole role = await _roleManager.FindByIdAsync(id);
-            if (role.Name != "Admin")
+            if (role.Name != "Admin")  //Can't delete admin role.
             {
-                await _roleManager.DeleteAsync(role);  //Can't delete admin role.
+                await _roleManager.DeleteAsync(role);
             }
             return RedirectToAction("Index");
         }
