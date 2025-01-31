@@ -27,7 +27,7 @@ namespace FanSiteTests
             // Done in the constructor
             // act
             ForumPost forumPost = new ForumPost();
-            var result = controller.ForumPostForm(forumPost);
+            var result = controller.ForumPostForm(forumPost).Result;
             // assert
             // Check to see if I got a RedirectToActionResult
             output.WriteLine(result.ToString());
@@ -39,7 +39,7 @@ namespace FanSiteTests
             // arrange
             // Done in the constructor
             // act
-            var result = controller.ForumPostForm(null);
+            var result = controller.ForumPostForm(null).Result;
             // assert
             // Check to see if I got a RedirectToActionResult
             output.WriteLine(result.ToString());
