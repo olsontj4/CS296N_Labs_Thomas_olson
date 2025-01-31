@@ -16,7 +16,7 @@ namespace GenericFanSite.Controllers
             repo = r;
         }
         [HttpGet]
-        public IActionResult Index(ForumSearchVM data)
+        public async Task<IActionResult> IndexAsync(ForumSearchVM data)
         {
             int countFromResults = data.Results;
             if (data.Results == 0)  //Default for number of forum posts displayed is 5.
@@ -25,7 +25,9 @@ namespace GenericFanSite.Controllers
             }
             else if (data.Results == -1)  //Display all.
             {
-                countFromResults = repo.GetAllForumPosts().ToList().Count;
+                countFromResults = repo.GetAllForumPosts()
+                    .ToList()
+                    .Count;
             }
             if (data.Filter == "Name")
             {
@@ -58,7 +60,6 @@ namespace GenericFanSite.Controllers
             }
             return View(data);
         }
-        /*private IQueryable */
         [Authorize]
         public IActionResult ForumPostForm()
         {
@@ -81,7 +82,7 @@ namespace GenericFanSite.Controllers
             {
                 try
                 {
-                    if (data != null && repo.StoreForumPost(data) > 0)
+                    if (data != null && await repo.StoreForumPostAsync(data) > 0)
                     {
                         return RedirectToAction("Index");
                     }
