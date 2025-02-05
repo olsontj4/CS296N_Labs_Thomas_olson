@@ -10,25 +10,23 @@ namespace GenericFanSite.Data
         {
             context = appDbContext;
         }
-        List<ForumPost> IForumRepo.GetAllForumPosts()
+        public List<ForumPost> GetAllForumPosts()
         {
-            var forumPosts = context.ForumPosts
+            return context.ForumPosts
                 .Include(forumPost => forumPost.User)
                 .ToList();
-            return forumPosts;
         }
-        ForumPost IForumRepo.GetForumPostById(int id)
+        public async Task<ForumPost> GetForumPostByIdAsync(int id)
         {
-            var review = context.ForumPosts
+            return await context.ForumPosts
                 .Include(forumPost => forumPost.User) // returns AppUser object
                 .Where(forumPost => forumPost.ForumPostId == id)
-                .SingleOrDefault();
-            return review;
+                .SingleOrDefaultAsync();
         }
-        int IForumRepo.StoreForumPost(ForumPost data)
+        public async Task<int> StoreForumPostAsync(ForumPost data)
         {
             data.Date = DateTime.Now;
-            context.ForumPosts.Add(data);
+            await context.ForumPosts.AddAsync(data);
             return context.SaveChanges();
             // returns a positive value if succussful
         }
