@@ -30,5 +30,10 @@ namespace GenericFanSite.Data
             return context.SaveChanges();
             // returns a positive value if succussful
         }
+        public int DeleteForumPost(int id)
+        {
+            context.Remove(id);
+            return context.SaveChanges();
+        }
     }
 }
