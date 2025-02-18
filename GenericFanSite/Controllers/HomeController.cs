@@ -21,7 +21,7 @@ namespace GenericFanSite.Controllers
         }
         public IActionResult Stories()
         {
-            return View();
+            return RedirectToAction("Index", "Forum");
         }
         public IActionResult Privacy()
         {

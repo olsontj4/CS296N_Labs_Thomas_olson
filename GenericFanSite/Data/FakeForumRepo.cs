@@ -28,8 +28,9 @@ namespace GenericFanSite.Data
         }
         public int DeleteForumPost(int id)
         {
-            context.Remove(id);
-            return context.SaveChanges();
+            /*context.Remove(id);
+            return context.SaveChanges();*/
+            throw new Exception();
         }
     }
 }
