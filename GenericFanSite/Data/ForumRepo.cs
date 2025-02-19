@@ -32,7 +32,8 @@ namespace GenericFanSite.Data
         }
         public int DeleteForumPost(int id)
         {
-            context.Remove(id);
+            ForumPost forumPost = GetForumPostByIdAsync(id).Result;
+            context.ForumPosts.Remove(forumPost);
             return context.SaveChanges();
         }
     }

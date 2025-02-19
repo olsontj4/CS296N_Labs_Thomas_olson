@@ -16,7 +16,7 @@ namespace GenericFanSite.Controllers
             repo = r;
         }
         [HttpGet]
-        public async Task<IActionResult> IndexAsync(ForumSearchVM data)
+        public async Task<IActionResult> Index(ForumSearchVM data)
         {
             int countFromResults = data.Results;
             if (data.Results == 0)  //Default for number of forum posts displayed is 5.
@@ -98,6 +98,11 @@ namespace GenericFanSite.Controllers
                     return View(data);
                 }
             }
+            return View(data);
+        }
+        public async Task<IActionResult> ForumPostSingle(int id)
+        {
+            ForumPost data = repo.GetForumPostByIdAsync(id).Result;
             return View(data);
         }
     }

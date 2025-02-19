@@ -97,6 +97,7 @@
                     <hr />
                     <p class="text-start float-start">Author: @forumPost.User.UserName &nbsp;</p>
                     <p class="text-sm-start text-start float-start float-sm-end">Posted on: @forumPost.Date.ToShortDateString()</p><!--Text should float to left and right sides except on small screens.-->
+                    <a asp-controller="Forum" asp-action="ForumPostSingle" asp-route-id="@forumPost.ForumPostId">View Comments</a>
                 </div>
             </div>
         }

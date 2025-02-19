@@ -1,9 +1,24 @@
-﻿@{
-    ViewData["Title"] = "All Stories";
+﻿@model ForumPost
+@{
+    ViewData["Title"] = Model.User.ToString() + "'s Story";
 }
-@model ForumSearchVM
 <a asp-controller="Home" asp-action="Index">Back to Home</a>
 <section class="text-center">
     <h1>@ViewData["Title"]:</h1>
 </section>
 <hr />
+<article class="container-fluid mt-3">
+    <div class="mt-md-3 text-center row d-flex justify-content-center">
+        <div class="bg-dark-subtle col col-md-8 mb-3">
+            <!--Forum post should only stretch to full width on smaller screens.-->
+            <h3>@Model.Title</h3>
+            <p>@Model.Description</p>
+            <p>Year this story took place: @Model.Year</p>
+            <hr />
+            <p>@Model.Story</p>
+            <hr />
+            <p class="text-start float-start">Author: @Model.User.UserName &nbsp;</p>
+            <p class="text-sm-start text-start float-start float-sm-end">Posted on: @Model.Date.ToShortDateString()</p><!--Text should float to left and right sides except on small screens.-->
+        </div>
+    </div>
+</article>
