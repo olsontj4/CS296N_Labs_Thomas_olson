@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using GenericFanSite.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace GenericFanSite.Controllers
 {
@@ -100,9 +101,47 @@ namespace GenericFanSite.Controllers
             }
             return View(data);
         }
+        [HttpGet]
         public async Task<IActionResult> ForumPostSingle(int id)
         {
             ForumPost data = repo.GetForumPostByIdAsync(id).Result;
+            return View(data);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ForumPostSingle(int id, Comment comment)
+        {
+            ForumPost data = repo.GetForumPostByIdAsync(id).Result;
+            if (!(comment.CommentText == null))
+            {
+                comment.CommentText = comment.CommentText.Trim();
+                comment.Date = DateTime.Now;
+                comment.User = await userManager.GetUserAsync(User);
+            }
+            else
+            {
+                return View(data);
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    data.Comments.Add(comment);
+                    if (data != null && await repo.UpdateForumPostAsync(data) > 0)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        ViewBag.RedText = "There was a really bad error saving the forum post.";
+                        return View();
+                    }
+                }
+                catch
+                {
+                    ViewBag.RedText = "An unknown error has occured.";
+                    return View(data);
+                }
+            }
             return View(data);
         }
     }

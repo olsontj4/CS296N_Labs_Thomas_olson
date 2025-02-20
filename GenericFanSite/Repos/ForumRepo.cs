@@ -30,6 +30,11 @@ namespace GenericFanSite.Data
             return context.SaveChanges();
             // returns a positive value if succussful
         }
+        public async Task<int> UpdateForumPostAsync(ForumPost data)
+        {
+            context.ForumPosts.Update(data);
+            return await context.SaveChangesAsync();
+        }
         public int DeleteForumPost(int id)
         {
             ForumPost forumPost = GetForumPostByIdAsync(id).Result;

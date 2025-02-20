@@ -26,6 +26,10 @@ namespace GenericFanSite.Data
             }
             return status;
         }
+        public async Task<int> UpdateForumPostAsync(ForumPost model)
+        {
+            return -1;
+        }
         public int DeleteForumPost(int id)
         {
             /*context.Remove(id);

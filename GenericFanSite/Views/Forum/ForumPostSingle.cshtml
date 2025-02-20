@@ -21,4 +21,17 @@
             <p class="text-sm-start text-start float-start float-sm-end">Posted on: @Model.Date.ToShortDateString()</p><!--Text should float to left and right sides except on small screens.-->
         </div>
     </div>
+    <div class="mt-md-3 row d-flex justify-content-center">
+        <div class="bg-dark-subtle col col-md-8 mb-3">
+        <h3>Comments:</h3>
+        <form class="input-group" method="post">
+            <input type="text" class="form-control" placeholder="Add a comment" aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Submit</button>
+            </div>
+        </form>
+        <hr />
+        Comment.
+        </div>
+    </div>
 </article>
