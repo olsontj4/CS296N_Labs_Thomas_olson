@@ -101,16 +101,17 @@ namespace GenericFanSite.Controllers
             }
             return View(data);
         }
+        [Authorize]
         [HttpGet]
-        public async Task<IActionResult> ForumPostSingle(int id)
+        public async Task<IActionResult> ForumPostSingle(int forumPostId)
         {
-            ForumPost data = repo.GetForumPostByIdAsync(id).Result;
+            ForumPost data = repo.GetForumPostByIdAsync(forumPostId).Result;
             return View(data);
         }
         [HttpPost]
-        public async Task<IActionResult> ForumPostSingle(int id, Comment comment)
+        public async Task<IActionResult> ForumPostSingle(int forumPostId, Comment comment)
         {
-            ForumPost data = repo.GetForumPostByIdAsync(id).Result;
+            ForumPost data = repo.GetForumPostByIdAsync(forumPostId).Result;
             if (!(comment.CommentText == null))
             {
                 comment.CommentText = comment.CommentText.Trim();
@@ -121,6 +122,7 @@ namespace GenericFanSite.Controllers
             {
                 return View(data);
             }
+            ModelState.Remove(nameof(comment.User));
             if (ModelState.IsValid)
             {
                 try
@@ -128,7 +130,7 @@ namespace GenericFanSite.Controllers
                     data.Comments.Add(comment);
                     if (data != null && await repo.UpdateForumPostAsync(data) > 0)
                     {
-                        return RedirectToAction("Index");
+                        return View(data);
                     }
                     else
                     {
@@ -143,6 +145,23 @@ namespace GenericFanSite.Controllers
                 }
             }
             return View(data);
+        }
+        [Authorize]
+        public IActionResult DeleteForumPost(int forumPostId)
+        {
+            if (repo.DeleteForumPost(forumPostId) > 0) {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("ForumPostSingle", forumPostId);
+            }
+        }
+        [Authorize]
+        public IActionResult DeleteComment(int forumPostId, int commentId)
+        {
+            repo.DeleteComment(forumPostId, commentId);
+            return RedirectToAction("ForumPostSingle", "Forum", new { forumPostId = forumPostId });
         }
     }
 }

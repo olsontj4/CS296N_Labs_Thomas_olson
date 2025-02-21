@@ -36,5 +36,9 @@ namespace GenericFanSite.Data
             return context.SaveChanges();*/
             throw new Exception();
         }
+        public int DeleteComment(int forumPostId, int commentId)
+        {
+            throw new Exception();
+        }
     }
 }

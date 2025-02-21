@@ -16,11 +16,13 @@ namespace GenericFanSite.Data
                 .Include(forumPost => forumPost.User)
                 .ToList();
         }
-        public async Task<ForumPost> GetForumPostByIdAsync(int id)
+        public async Task<ForumPost> GetForumPostByIdAsync(int forumPostId)
         {
             return await context.ForumPosts
                 .Include(forumPost => forumPost.User) // returns AppUser object
-                .Where(forumPost => forumPost.ForumPostId == id)
+                .Include(forumPost => forumPost.Comments)
+                .ThenInclude(forumPost => forumPost.User)  //User is commenter, not Forum post author.
+                .Where(forumPost => forumPost.ForumPostId == forumPostId)
                 .SingleOrDefaultAsync();
         }
         public async Task<int> StoreForumPostAsync(ForumPost data)
@@ -35,10 +37,17 @@ namespace GenericFanSite.Data
             context.ForumPosts.Update(data);
             return await context.SaveChangesAsync();
         }
-        public int DeleteForumPost(int id)
+        public int DeleteForumPost(int forumPostId)
         {
-            ForumPost forumPost = GetForumPostByIdAsync(id).Result;
+            ForumPost forumPost = GetForumPostByIdAsync(forumPostId).Result;
             context.ForumPosts.Remove(forumPost);
+            return context.SaveChanges();
+        }
+        public int DeleteComment(int forumPostId, int commentId)
+        {
+            ForumPost forumPost = GetForumPostByIdAsync(forumPostId).Result;
+            Comment comment = forumPost.Comments.Where(c => c.CommentId == commentId).SingleOrDefault();
+            forumPost.Comments.Remove(comment);
             return context.SaveChanges();
         }
     }
