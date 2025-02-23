@@ -13,7 +13,6 @@ namespace GenericFanSite.Controllers
             _userManager = userMngr;
             _signInManager = signInMngr;
         }
-        // The Register(), LogIn(), and LogOut()methods go here
         [HttpGet]
         public IActionResult Register()
         {
@@ -25,6 +24,7 @@ namespace GenericFanSite.Controllers
             if (ModelState.IsValid)
             {
                 var user = new AppUser { UserName = model.Username };
+                user.SignUpDate = DateTime.Now;
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
