@@ -108,6 +108,7 @@ namespace GenericFanSite.Controllers
             ForumPost data = repo.GetForumPostByIdAsync(forumPostId).Result;
             return View(data);
         }
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> ForumPostSingle(int forumPostId, Comment comment)
         {
