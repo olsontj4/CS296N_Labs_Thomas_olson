@@ -13,7 +13,6 @@ namespace GenericFanSite.Controllers
             _userManager = userMngr;
             _signInManager = signInMngr;
         }
-        // The Register(), LogIn(), and LogOut()methods go here
         [HttpGet]
         public IActionResult Register()
         {
