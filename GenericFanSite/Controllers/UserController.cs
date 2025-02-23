@@ -42,7 +42,7 @@ namespace GenericFanSite.Controllers
             if (ModelState.IsValid)
             {
                 var user = new AppUser { UserName = model.Username };
-                user.SignUpDate = DateTime.Now;  //TODO: Test assignment and display of sign up date.
+                user.SignUpDate = DateTime.Now;
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
