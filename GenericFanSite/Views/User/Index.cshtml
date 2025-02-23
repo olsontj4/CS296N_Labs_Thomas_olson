@@ -10,7 +10,7 @@
 <div class="container col col-md-8">
 <table class="table table-bordered table-striped table-sm">
     <thead>
-            <tr><th>Username:</th><th>Roles:</th><th>Sign-Up Date:</th><th></th></tr>
+        <tr><th>Username</th><th>Roles</th><th></th><th></th><th></th></tr>
     </thead>
     <tbody>
         @if (Model.AppUsers.Count() == 0)
@@ -29,29 +29,34 @@
                             <div>@roleName</div>
                         }
                     </td>
-                    <td>@appUser.SignUpDate</td>
                     <td>
-                        <form class="float-start" method="post" asp-action="Delete" asp-route-id="@appUser.Id">
+                        <form method="post" asp-action="Delete" asp-route-id="@appUser.Id">
                             @if (appUser.RoleNames.Contains("Admin"))
                             {
-                                <button disabled type="submit" class="btn btn-outline-danger me-1">Delete User</button>
+                                <button disabled type="submit" class="btn btn-outline-primary">Delete User</button>
                             }
                             else
                             {
-                                <button type="submit" class="btn btn-danger me-1">Delete User</button>
+                                <button type="submit" class="btn btn-primary">Delete User</button>
                             }
                         </form>
-                        <form class="float-start" method="post" asp-action="AddToAdmin" asp-route-id="@appUser.Id">
-                            <button type="submit" class="btn btn-primary me-1">Add To Admin</button>
+                    </td>
+                    <td>
+                        <form method="post" asp-action="AddToAdmin" asp-route-id="@appUser.Id">
+                            <button type="submit" class="btn btn-primary">
+                                Add To Admin
+                            </button>
                         </form>
-                        <form class="float-start" method="post" asp-action="RemoveFromAdmin" asp-route-id="@appUser.Id">
-                            @if (Model.AppUsers.Where(r => r.RoleNames.Contains("Admin")).Count() == 1 && appUser.RoleNames.Contains("Admin"))
+                    </td>
+                    <td>
+                        <form method="post" asp-action="RemoveFromAdmin" asp-route-id="@appUser.Id">
+                                @if (Model.AppUsers.Where(r => r.RoleNames.Contains("Admin")).Count() == 1 && appUser.RoleNames.Contains("Admin"))
                             {
-                                <button disabled type="submit" class="btn btn-outline-primary me-1">Remove From Admin</button>
+                                <button disabled type="submit" class="btn btn-outline-primary">Remove From Admin</button>
                             }
                             else
                             {
-                                <button type="submit" class="btn btn-primary me-1">Remove From Admin</button>
+                                <button type="submit" class="btn btn-primary">Remove From Admin</button>
                             }
                         </form>
                     </td>
@@ -73,7 +78,7 @@ else
 {
     <table class="table table-bordered table-striped table-sm">
         <thead>
-            <tr><th>Role:</th><th></th></tr>
+            <tr><th>Role</th><th></th></tr>
         </thead>
         <tbody>
             @foreach (var role in Model.Roles)
@@ -83,11 +88,11 @@ else
                     <td>
                         <form method="post" asp-action="DeleteRole" asp-route-id="@role.Id">
                             @if (role.Name == "Admin") {
-                                <button disabled type="submit" class="btn btn-outline-danger">Delete Role</button>
+                                <button disabled type="submit" class="btn btn-outline-primary">Delete Role</button>
                             }
                             else
                             {
-                                <button type="submit" class="btn btn-danger">Delete Role</button>
+                                <button type="submit" class="btn btn-primary">Delete Role</button>
                             }
                         </form>
                     </td>

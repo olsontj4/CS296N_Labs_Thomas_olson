@@ -20,6 +20,5 @@ namespace GenericFanSite.Models
         [Required]
         public AppUser? User { get; set;}
         public DateTime Date { get; set;}
-        public ICollection<Comment>? Comments { get; set;}
     }
 }
