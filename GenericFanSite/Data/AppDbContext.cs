@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GenericFanSite.Data
 {
-    public class AppDbContext : IdentityDbContext
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
         // constructor just calls the base class constructor
         public AppDbContext(
