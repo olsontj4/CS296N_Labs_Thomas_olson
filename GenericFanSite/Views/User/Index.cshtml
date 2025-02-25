@@ -8,11 +8,11 @@
 </section>
 <hr />
 <div class="container col col-md-8">
-<table class="table table-bordered table-striped table-sm">
-    <thead>
+    <table class="table table-bordered table-striped table-sm">
+        <thead>
             <tr><th>Username:</th><th>Roles:</th><th>Sign-Up Date:</th><th></th></tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         @if (Model.AppUsers.Count() == 0)
         {
             <tr><td colspan="5">There are no user accounts.</td></tr>
@@ -22,37 +22,53 @@
             @foreach (AppUser appUser in Model.AppUsers)
             {
                 <tr>
-                        <td><a asp-action="UpdatePassword" asp-route-id="@appUser.Id" title="Change Password">@appUser.UserName</a></td>
+                    <td><a asp-action="UpdatePassword" asp-route-id="@appUser.Id" title="Change Password">@appUser.UserName</a></td>
                     <td>
-                        @foreach (string roleName in appUser.RoleNames)
-                        {
-                            <div>@roleName</div>
-                        }
+                    @foreach (string roleName in appUser.RoleNames)
+                    {
+                        <div>@roleName</div>
+                    }
                     </td>
                     <td><abbr title="@appUser.SignUpDate.ToString()">@appUser.SignUpDate.ToShortDateString()</abbr></td>
                     <td>
                         <form class="float-start" method="post" asp-action="Delete" asp-route-id="@appUser.Id">
-                            @if (appUser.RoleNames.Contains("Admin"))
-                            {
-                                <button disabled type="submit" class="btn btn-outline-danger me-1">Delete User</button>
-                            }
-                            else
-                            {
-                                <button type="submit" class="btn btn-danger me-1">Delete User</button>
-                            }
+                        @if (appUser.RoleNames.Contains("Admin"))
+                        {
+                            <button disabled type="submit" class="btn btn-outline-danger me-1">Delete User</button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-danger me-1">Delete User</button>
+                        }
                         </form>
-                        <form class="float-start" method="post" asp-action="AddToAdmin" asp-route-id="@appUser.Id">
-                            <button type="submit" class="btn btn-primary me-1">Add To Admin</button>
+                        <form class="float-start" method="post">
+                            <div class="dropdown float-start">
+                                <button class="btn btn-primary dropdown-toggle me-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">Add To Role</button>
+                                <ul class="dropdown-menu">
+                                @foreach (var role in Model.Roles)
+                                {
+                                    <li><button class="dropdown-item" asp-action="AddToRole" asp-route-userId="@appUser.Id" asp-route-roleId="@role.Id" type="submit">@role.Name</button></li>
+                                }
+                                </ul>
+                            </div>
                         </form>
-                        <form class="float-start" method="post" asp-action="RemoveFromAdmin" asp-route-id="@appUser.Id">
-                            @if (Model.AppUsers.Where(r => r.RoleNames.Contains("Admin")).Count() == 1 && appUser.RoleNames.Contains("Admin"))
-                            {
-                                <button disabled type="submit" class="btn btn-outline-primary me-1">Remove From Admin</button>
-                            }
-                            else
-                            {
-                                <button type="submit" class="btn btn-primary me-1">Remove From Admin</button>
-                            }
+                        <form class="float-start" method="post">
+                            <div class="dropdown float-start">
+                                <button class="btn btn-primary dropdown-toggle me-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">Remove From Role</button>
+                                <ul class="dropdown-menu">
+                                @foreach (var role in Model.Roles)
+                                {
+                                    @if (Model.AppUsers.Where(r => r.RoleNames.Contains("Admin")).Count() == 1 && role.Name == "Admin")
+                                    {
+                                        <li><button disabled class="dropdown-item">@role.Name</button></li>
+                                    }
+                                    else
+                                    {
+                                        <li><button class="dropdown-item" asp-action="RemoveFromRole" asp-route-userId="@appUser.Id" asp-route-roleId="@role.Id" type="submit">@role.Name</button></li>
+                                    }
+                                }
+                                </ul>
+                            </div>
                         </form>
                     </td>
                 </tr>
