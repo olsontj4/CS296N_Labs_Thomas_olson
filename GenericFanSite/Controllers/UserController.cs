@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace GenericFanSite.Controllers
 {
@@ -19,7 +20,7 @@ namespace GenericFanSite.Controllers
         public async Task<IActionResult> Index()  //Renders the admin page for managing users and roles
         {
             List<AppUser> appUsers = new List<AppUser>();
-            foreach (AppUser appUser in _userManager.Users.ToList())
+            foreach (AppUser appUser in _userManager.Users.OrderBy(a => a.SignUpDate).ToList())
             {
                 appUser.RoleNames = await _userManager.GetRolesAsync(appUser);
                 appUsers.Add(appUser);

@@ -29,7 +29,7 @@
                             <div>@roleName</div>
                         }
                     </td>
-                    <td>@appUser.SignUpDate</td>
+                    <td><abbr title="@appUser.SignUpDate.ToString()">@appUser.SignUpDate.ToShortDateString()</abbr></td>
                     <td>
                         <form class="float-start" method="post" asp-action="Delete" asp-route-id="@appUser.Id">
                             @if (appUser.RoleNames.Contains("Admin"))
