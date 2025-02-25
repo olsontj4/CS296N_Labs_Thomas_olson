@@ -123,5 +123,36 @@ namespace GenericFanSite.Controllers
             }
             return RedirectToAction("Index");
         }
+        [HttpGet]
+        public IActionResult UpdatePassword(string id)
+        {
+            PasswordVM model = new()
+            {
+                id = id
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdatePassword(PasswordVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(model.id);
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var result = await _userManager.ResetPasswordAsync(user, token, model.Password);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
+            }
+            return View(model);
+        }
     }
 }

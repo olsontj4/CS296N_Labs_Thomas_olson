@@ -22,7 +22,7 @@
             @foreach (AppUser appUser in Model.AppUsers)
             {
                 <tr>
-                    <td>@appUser.UserName</td>
+                        <td><a asp-action="UpdatePassword" asp-route-id="@appUser.Id" title="Change Password">@appUser.UserName</a></td>
                     <td>
                         @foreach (string roleName in appUser.RoleNames)
                         {
