@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace GenericFanSite.Controllers
 {
@@ -19,7 +20,7 @@ namespace GenericFanSite.Controllers
         public async Task<IActionResult> Index()  //Renders the admin page for managing users and roles
         {
             List<AppUser> appUsers = new List<AppUser>();
-            foreach (AppUser appUser in _userManager.Users.ToList())
+            foreach (AppUser appUser in _userManager.Users.OrderBy(a => a.SignUpDate).ToList())
             {
                 appUser.RoleNames = await _userManager.GetRolesAsync(appUser);
                 appUsers.Add(appUser);
@@ -85,26 +86,19 @@ namespace GenericFanSite.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
-        public async Task<IActionResult> AddToAdmin(string id)  //Adds a user to the "Admin" role
+        public async Task<IActionResult> AddToRole(string userId, string roleId)
         {
-            IdentityRole adminRole = await _roleManager.FindByNameAsync("Admin");
-            if (adminRole == null)
-            {
-                TempData["message"] = "Admin role does not exist. "
-                + "Click 'Create Admin Role' button to create it.";
-            }
-            else
-            {
-                AppUser user = await _userManager.FindByIdAsync(id);
-                await _userManager.AddToRoleAsync(user, adminRole.Name);
-            }
+            IdentityRole role = await _roleManager.FindByIdAsync(roleId);
+            AppUser user = await _userManager.FindByIdAsync(userId);
+            await _userManager.AddToRoleAsync(user, role.Name);
             return RedirectToAction("Index");
         }
         [HttpPost]
-        public async Task<IActionResult> RemoveFromAdmin(string id)  //Removes a user from the "Admin" role
+        public async Task<IActionResult> RemoveFromRole(string userId, string roleId)
         {
-            AppUser user = await _userManager.FindByIdAsync(id);
-            await _userManager.RemoveFromRoleAsync(user, "Admin");
+            IdentityRole role = await _roleManager.FindByIdAsync(roleId);
+            AppUser user = await _userManager.FindByIdAsync(userId);
+            await _userManager.RemoveFromRoleAsync(user, role.Name);
             return RedirectToAction("Index");
         }
         [HttpPost]
@@ -122,6 +116,37 @@ namespace GenericFanSite.Controllers
                 await _roleManager.DeleteAsync(role);
             }
             return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public IActionResult UpdatePassword(string id)
+        {
+            PasswordVM model = new()
+            {
+                id = id
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdatePassword(PasswordVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(model.id);
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var result = await _userManager.ResetPasswordAsync(user, token, model.Password);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
+            }
+            return View(model);
         }
     }
 }
