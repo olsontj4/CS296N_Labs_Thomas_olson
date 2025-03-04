@@ -61,7 +61,7 @@
                     <hr class="my-1"/>
                     <p class="mb-1">@c.User:</p>
                     <p class="mb-1">@c.CommentText</p>
-                    <abbr class="text-secondary" title="@c.Date.ToString()">@c.Date.ToString()</abbr>
+                    <abbr class="text-secondary" title="@c.Date.ToString()">@c.Date.ToShortDateString()</abbr>
                     @if (User.Identity.Name == c.User.UserName || User.IsInRole("Admin"))
                     {
                         <a class="text-danger text-sm-start text-start float-start float-sm-end" asp-controller="Forum" asp-action="DeleteComment" asp-route-forumPostId="@Model.ForumPost.ForumPostId" asp-route-commentId="@c.CommentId">Delete Comment</a>
