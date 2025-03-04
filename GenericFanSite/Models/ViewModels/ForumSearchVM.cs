@@ -1,4 +1,4 @@
-﻿namespace GenericFanSite.Models
+﻿namespace GenericFanSite.Models.ViewModels
 {
     public class ForumSearchVM
     {

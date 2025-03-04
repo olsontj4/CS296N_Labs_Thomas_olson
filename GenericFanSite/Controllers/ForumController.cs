@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using GenericFanSite.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using static System.Net.Mime.MediaTypeNames;
+using GenericFanSite.Models.ViewModels;
 
 namespace GenericFanSite.Controllers
 {
@@ -78,6 +78,10 @@ namespace GenericFanSite.Controllers
             {
                 data.User = await userManager.GetUserAsync(User);
             }
+            if (data.Year > DateTime.Now.Year)
+            {
+                ModelState.AddModelError("Year", "Year can't be greater than " + DateTime.Now.Year.ToString() + ".");
+            }
             ModelState.Remove(nameof(data.User));  //Ignoring user validation for now since you need to be logged in anyway to get here.
             if (ModelState.IsValid)
             {
@@ -89,13 +93,13 @@ namespace GenericFanSite.Controllers
                     }
                     else
                     {
-                        ViewBag.RedText = "There was a really bad error saving the forum post.";
+                        ModelState.AddModelError(string.Empty, "There was a really bad error saving the forum post.");
                         return View();
                     }
                 }
                 catch
                 {
-                    ViewBag.RedText = "An unknown error has occured.";
+                    ModelState.AddModelError(string.Empty, "An unknown error has occured.");
                     return View(data);
                 }
             }
@@ -105,47 +109,56 @@ namespace GenericFanSite.Controllers
         [HttpGet]
         public async Task<IActionResult> ForumPostSingle(int forumPostId)
         {
-            ForumPost data = repo.GetForumPostByIdAsync(forumPostId).Result;
-            return View(data);
+            var model = new ForumPostSingleVM();
+            model.ForumPost = await repo.GetForumPostByIdAsync(forumPostId);
+            return View(model);
         }
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> ForumPostSingle(int forumPostId, Comment comment)
+        public async Task<IActionResult> ForumPostSingle(ForumPostSingleVM data)
         {
-            ForumPost data = repo.GetForumPostByIdAsync(forumPostId).Result;
-            if (!(comment.CommentText == null))
+            var model = new ForumPostSingleVM();
+            model.ForumPost = await repo.GetForumPostByIdAsync(data.ForumPost.ForumPostId);
+            if (data.NewComment?.CommentText != null)
             {
-                comment.CommentText = comment.CommentText.Trim();
-                comment.Date = DateTime.Now;
-                comment.User = await userManager.GetUserAsync(User);
+                data.NewComment.CommentText = data.NewComment.CommentText.Trim();
+                data.NewComment.Date = DateTime.Now;
+                data.NewComment.User = await userManager.GetUserAsync(User);
             }
             else
             {
-                return View(data);
+                return View(model);
             }
-            ModelState.Remove(nameof(comment.User));
+            ModelState.Remove("ForumPost.Title");
+            ModelState.Remove("ForumPost.Description");
+            ModelState.Remove("ForumPost.Story");
+            ModelState.Remove("ForumPost.Year");
+            ModelState.Remove("ForumPost.Date");
+            ModelState.Remove("ForumPost.User");
+            ModelState.Remove("NewComment.User");
+            model.NewComment = data.NewComment;
             if (ModelState.IsValid)
             {
                 try
                 {
-                    data.Comments.Add(comment);
-                    if (data != null && await repo.UpdateForumPostAsync(data) > 0)
+                    model.ForumPost.Comments.Add(data.NewComment);
+                    if (model.ForumPost != null)
                     {
-                        return View(data);
+                        await repo.UpdateForumPostAsync(model.ForumPost);
+                        model.ForumPost = await repo.GetForumPostByIdAsync(data.ForumPost.ForumPostId);
+                        model.NewComment = null;
                     }
                     else
                     {
-                        ViewBag.RedText = "There was a really bad error saving the forum post.";
-                        return View();
+                        ModelState.AddModelError(string.Empty, "There was a really bad error saving the forum post.");
                     }
                 }
                 catch
                 {
-                    ViewBag.RedText = "An unknown error has occured.";
-                    return View(data);
+                    ModelState.AddModelError(string.Empty, "An unknown error has occured.");
                 }
             }
-            return View(data);
+            return View(model);
         }
         [Authorize]
         public IActionResult DeleteForumPost(int forumPostId)
