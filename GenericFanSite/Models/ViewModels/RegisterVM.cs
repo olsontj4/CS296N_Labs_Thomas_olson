@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GenericFanSite.Models
+namespace GenericFanSite.Models.ViewModels
 {
     public class RegisterVM
     {
