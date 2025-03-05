@@ -8,11 +8,11 @@ namespace GenericFanSite.Data
         public static async Task Seed(AppDbContext context, IServiceProvider serviceProvider)
         {
             var userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
-            if (!context.ForumPosts.Any())  // this is to prevent adding duplicate data
+            if (!(context.ForumPosts.Any() || context.Users.Any())) // this is to prevent adding duplicate data
             {
                 // Create User objects
                 const string PASSWORD = "Secret!123";
-                List<string> userNames = new() { "Thomasj041", "Than", "Helena", "Brooke", "Brian" };
+                List<string> userNames = new() { "Thomasj041", "Than", "Helena", "Brooke", "Brian", "Beat" };
                 var appUsers = new List<AppUser>();
                 for (var i = 0; i < userNames.Count; i++)
                 {
@@ -48,7 +48,16 @@ namespace GenericFanSite.Data
                     Year = 1987,
                     Story = "Truly an emotional rollercoaster, one of the best experiences I've been through. The story it immerses you into is immaculate, telling many different and yet complete and introspective narratives. It tells so much about human life and about life itself, so many parallels and allegories, about the duality of existence itself. And they don't dumb it down for their audience, they're one of the few bands that respect their audience. They know we'll understand the beauty they unfold through song form. When he sang \"Backwards and forwards\" I cried. This song has always been my escape from depressive situations. It helped me gain confidence, to truly feel and experience the world around me, and to understand. And the chords and melodies work together like no other song, nothing even comes close! I doubt there's many that would, or even 𝑐𝑜𝑢𝑙𝑑 dislike this song. Changed my life when I first heard it, and I don't know where I'd be without it. Thanks Lorem Ipsum, from a truly grateful fan.",
                     User = appUsers[2]/*user3*/,
-                    Date = DateTime.Parse("11/27/2024")
+                    Date = DateTime.Parse("11/27/2024"),
+                    Comments =
+                    {
+                        new()
+                        {
+                            User = appUsers[5],
+                            CommentText = "I agree. The music has a way of speaking that is peculiar, rich in mannerisms, ingrained with all the theatrical gestures. The sound is odd, this hidden dialect that is turned into an alien high-speech with snarling consonants is completely weird. I heard this album first with my mother’s mother (*1917) back in the 1990s. She was 16 in 1933 and she was now, in the 1990s, as alienated as I was. “This is difficult for anyone to understand who was not young back then,\" she said, \"today I feel that this was almost impossible to adore - I did not really adore it but we all had hopes.” Thanks Lorem Ipsum, from a truly grateful fan.",
+                            Date = DateTime.Parse("2/25/2025 1:32:06 AM")
+                        }
+                    }
                 };
                 ForumPost forumPost4 = new ForumPost
                 {

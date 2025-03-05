@@ -1,4 +1,5 @@
 ﻿using GenericFanSite.Models;
+using GenericFanSite.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -76,6 +77,10 @@ namespace GenericFanSite.Controllers
                             errorMessage += error.Description + " | ";
                         }
                         TempData["message"] = errorMessage;
+                    }
+                    else
+                    {
+                        await _userManager.UpdateSecurityStampAsync(user);
                     }
                 }
                 else

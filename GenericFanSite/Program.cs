@@ -2,7 +2,6 @@ using GenericFanSite.Data;
 using GenericFanSite.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +15,12 @@ builder.Services.AddIdentity<AppUser, IdentityRole>()
 var connectionString = builder.Configuration.GetConnectionString("MySqlConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+builder.Services.Configure<SecurityStampValidatorOptions>(options =>
+{
+    // enables immediate logout, after updating the user's stat.
+    options.ValidationInterval = TimeSpan.Zero;
+});
 
 var app = builder.Build();
 
@@ -41,9 +46,9 @@ app.MapControllerRoute(
 // Get a DbContext object
 using (var scope = app.Services.CreateScope())
 {
-    await SeedUsers.CreateAdminUserAsync(scope.ServiceProvider);
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await SeedData.Seed(context, scope.ServiceProvider);
+    await SeedUsers.CreateAdminUserAsync(scope.ServiceProvider);
 }
 
 app.Run();

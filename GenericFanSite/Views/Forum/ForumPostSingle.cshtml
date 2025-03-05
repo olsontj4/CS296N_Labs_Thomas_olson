@@ -1,8 +1,9 @@
-﻿@using Microsoft.AspNetCore.Identity
-@model ForumPost
+﻿@using GenericFanSite.Models.ViewModels
+@using Microsoft.AspNetCore.Identity
+@model ForumPostSingleVM
 @inject SignInManager<AppUser> signInManager
 @{
-    ViewData["Title"] = Model.User.ToString() + "'s Story";
+    ViewData["Title"] = Model.ForumPost.User.UserName + "'s Story";
 }
 <a asp-controller="Home" asp-action="Index">Back to Home</a>
 <section class="text-center">
@@ -13,46 +14,65 @@
     <div class="mt-md-3 text-center row d-flex justify-content-center">
         <div class="bg-dark-subtle col col-md-8 mb-3">
             <!--Forum post should only stretch to full width on smaller screens.-->
-            <h3>@Model.Title</h3>
-            <p>@Model.Description</p>
-            <p>Year this story took place: @Model.Year</p>
+            <h3>@Model.ForumPost.Title</h3>
+            <p>@Model.ForumPost.Description</p>
+            <p>Year this story took place: @Model.ForumPost.Year</p>
             <hr />
-            <p>@Model.Story</p>
+            <p>@Model.ForumPost.Story</p>
             <hr />
-            <p class="text-start float-start mb-0">Author: @Model.User.UserName &nbsp;</p>
-            <abbr class="text-sm-start text-start float-start float-sm-end mb-0" title="@Model.Date.ToString()">Posted on: @Model.Date.ToShortDateString()</abbr><!--Text should float to left and right sides except on small screens.-->
-            @if (User.Identity.Name == Model.User.UserName || User.IsInRole("Admin"))
+            <p class="text-start float-start mb-0">Author: @Model.ForumPost.User.UserName &nbsp;</p>
+            <abbr class="text-sm-start text-start float-start float-sm-end mb-0" title="@Model.ForumPost.Date.ToString()">Posted on: @Model.ForumPost.Date.ToShortDateString()</abbr><!--Text should float to left and right sides except on small screens.-->
+            @if (User.Identity.Name == Model.ForumPost.User.UserName || User.IsInRole("Admin"))
             {
                 <br />
-                <a class="text-danger text-sm-start text-start float-start float-sm-end" asp-controller="Forum" asp-action="DeleteForumPost" asp-route-forumPostId="@Model.ForumPostId">Delete Post</a>
+                <a class="text-danger text-sm-start text-start float-start float-sm-end" asp-controller="Forum" asp-action="DeleteForumPost" asp-route-forumPostId="@Model.ForumPost.ForumPostId">Delete Post</a>
             }
         </div>
     </div>
     <div class="mt-md-3 row d-flex justify-content-center">
         <div class="bg-dark-subtle col col-md-8 mb-3">
-        <h3>Comments:</h3>
-        <form class="input-group mb-3" method="post">
-            <input type="text" class="form-control" placeholder="Add a comment" name="CommentText">
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="submit">Submit</button>
-            </div>
-        </form>
-        @if (Model.Comments.Count > 0) {
-            foreach (Comment comment in Model.Comments) {
-                <hr class="my-1"/>
-                <p class="mb-1">@comment.User:</p>
-                <p class="mb-1">@comment.CommentText</p>
-                <abbr class="text-secondary" title="@comment.Date.ToString()">@comment.Date.ToShortDateString()</abbr>
-                @if (User.Identity.Name == comment.User.UserName || User.IsInRole("Admin"))
+            <h3>Comments:</h3>
+            <form class="" method="post">
+                <input hidden asp-for="@Model.ForumPost.ForumPostId" value="@Model.ForumPost.ForumPostId" />
+                <div class="input-group mb-3">
+                    @if (Model.NewComment != null)
+                    {
+                        if (Model.NewComment.CommentText != null)
+                        {
+                            <input asp-for="NewComment.CommentText" type="text" class="form-control" value="@Model.NewComment.CommentText">
+                        }
+                        else
+                        {
+                            <input asp-for="NewComment.CommentText" type="text" class="form-control" placeholder="Add a comment" value="">
+                        }
+                    }
+                    else
+                    {
+                        <input asp-for="NewComment.CommentText" type="text" class="form-control" placeholder="Add a comment" value="">
+                    }
+                    <button class="btn btn-outline-secondary" type="submit">Submit</button>
+                </div>
+            </form>
+            <span asp-validation-for="NewComment.CommentText" asp-validation-summary="All" class="text-danger"></span>
+            @if (Model.ForumPost.Comments.Count > 0)
+            {
+                foreach (Comment c in Model.ForumPost.Comments.OrderByDescending(x => x.Date))
                 {
-                    <a class="text-danger text-sm-start text-start float-start float-sm-end" asp-controller="Forum" asp-action="DeleteComment" asp-route-forumPostId="@Model.ForumPostId" asp-route-commentId="@comment.CommentId">Delete Comment</a>
+                    <hr class="my-1"/>
+                    <p class="mb-1">@c.User:</p>
+                    <p class="mb-1">@c.CommentText</p>
+                    <abbr class="text-secondary" title="@c.Date.ToString()">@c.Date.ToShortDateString()</abbr>
+                    @if (User.Identity.Name == c.User.UserName || User.IsInRole("Admin"))
+                    {
+                        <a class="text-danger text-sm-start text-start float-start float-sm-end" asp-controller="Forum" asp-action="DeleteComment" asp-route-forumPostId="@Model.ForumPost.ForumPostId" asp-route-commentId="@c.CommentId">Delete Comment</a>
+                    }
                 }
             }
-        }
-        else {
-            <hr />
-            <p class="text-danger">There are no comments.</p>
-        }
+            else
+            {
+                <hr />
+                <p class="text-danger">There are no comments.</p>
+            }
         </div>
     </div>
 </article>
