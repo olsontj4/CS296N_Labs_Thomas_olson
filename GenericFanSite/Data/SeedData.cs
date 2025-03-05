@@ -8,7 +8,7 @@ namespace GenericFanSite.Data
         public static async Task Seed(AppDbContext context, IServiceProvider serviceProvider)
         {
             var userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
-            if (!context.ForumPosts.Any())  // this is to prevent adding duplicate data
+            if (!(context.ForumPosts.Any() || context.Users.Any())) // this is to prevent adding duplicate data
             {
                 // Create User objects
                 const string PASSWORD = "Secret!123";

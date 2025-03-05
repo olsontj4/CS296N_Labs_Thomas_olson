@@ -78,6 +78,10 @@ namespace GenericFanSite.Controllers
                         }
                         TempData["message"] = errorMessage;
                     }
+                    else
+                    {
+                        await _userManager.UpdateSecurityStampAsync(user);
+                    }
                 }
                 else
                 {
