@@ -118,7 +118,7 @@ namespace GenericFanSite.Controllers
         public async Task<IActionResult> ForumPostSingle(ForumPostSingleVM data)
         {
             var model = new ForumPostSingleVM();
-            model.ForumPost = await repo.GetForumPostByIdAsync(data.ForumPost.ForumPostId);
+            data.ForumPost = await repo.GetForumPostByIdAsync(data.ForumPost.ForumPostId);
             if (data.NewComment?.CommentText != null)
             {
                 data.NewComment.CommentText = data.NewComment.CommentText.Trim();
@@ -127,26 +127,26 @@ namespace GenericFanSite.Controllers
             }
             else
             {
+                model.ForumPost = await repo.GetForumPostByIdAsync(data.ForumPost.ForumPostId);
                 return View(model);
             }
-            ModelState.Remove("ForumPost.Title");
+            /*ModelState.Remove("ForumPost.Title");
             ModelState.Remove("ForumPost.Description");
             ModelState.Remove("ForumPost.Story");
             ModelState.Remove("ForumPost.Year");
             ModelState.Remove("ForumPost.Date");
             ModelState.Remove("ForumPost.User");
-            ModelState.Remove("NewComment.User");
-            model.NewComment = data.NewComment;
+            ModelState.Remove("NewComment.User");*/
+            ModelState.Clear();
+            TryValidateModel(data);
             if (ModelState.IsValid)
             {
                 try
                 {
-                    model.ForumPost.Comments.Add(data.NewComment);
-                    if (model.ForumPost != null)
+                    data.ForumPost.Comments.Add(data.NewComment);
+                    if (data.ForumPost != null)
                     {
-                        await repo.UpdateForumPostAsync(model.ForumPost);
-                        model.ForumPost = await repo.GetForumPostByIdAsync(data.ForumPost.ForumPostId);
-                        model.NewComment = null;
+                        await repo.UpdateForumPostAsync(data.ForumPost);
                     }
                     else
                     {
@@ -158,6 +158,11 @@ namespace GenericFanSite.Controllers
                     ModelState.AddModelError(string.Empty, "An unknown error has occured.");
                 }
             }
+            else
+            {
+                model.NewComment = data.NewComment;
+            }
+            model.ForumPost = await repo.GetForumPostByIdAsync(data.ForumPost.ForumPostId);
             return View(model);
         }
         [Authorize]

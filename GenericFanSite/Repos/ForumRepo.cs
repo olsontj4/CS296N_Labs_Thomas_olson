@@ -20,7 +20,7 @@ namespace GenericFanSite.Data
         {
             return await context.ForumPosts
                 .Include(forumPost => forumPost.User) // returns AppUser object
-                .Include(forumPost => forumPost.Comments.OrderByDescending(c => c.Date))
+                .Include(forumPost => forumPost.Comments/*.OrderByDescending(c => c.Date)*/)
                 .ThenInclude(forumPost => forumPost.User)  //User is commenter, not Forum post author.
                 .Where(forumPost => forumPost.ForumPostId == forumPostId)
                 .SingleOrDefaultAsync();
