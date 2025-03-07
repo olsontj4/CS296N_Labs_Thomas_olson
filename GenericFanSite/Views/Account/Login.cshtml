@@ -10,6 +10,8 @@
 <hr />
 <article class="d-flex justify-content-center container">
     <div class="mt-md-3 bg-dark-subtle p-3 col-12 col-md-6">
+    @if (Model?.ReturnUrl != null)
+    {
         <form class="" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <label class="form-label" for="username">Username:</label>
@@ -25,5 +27,6 @@
             <br />
             <a asp-action="Register" asp-route-returnUrl="@Model.ReturnUrl">Create an account</a>
         </form>
+    }
     </div>
 </article>
