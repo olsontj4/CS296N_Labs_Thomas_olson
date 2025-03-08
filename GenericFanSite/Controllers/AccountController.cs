@@ -7,8 +7,8 @@ namespace GenericFanSite.Controllers
 {
     public class AccountController : Controller
     {
-        private UserManager<AppUser> _userManager;
-        private SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
         public AccountController(UserManager<AppUser> userMngr, SignInManager<AppUser> signInMngr)
         {
             _userManager = userMngr;

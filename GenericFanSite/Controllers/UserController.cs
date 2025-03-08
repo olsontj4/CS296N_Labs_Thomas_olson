@@ -3,15 +3,14 @@ using GenericFanSite.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace GenericFanSite.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
-        private UserManager<AppUser> _userManager;
-        private RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         public UserController(UserManager<AppUser> userMngr, RoleManager<IdentityRole> roleMngr)
         {
             _userManager = userMngr;
@@ -127,7 +126,7 @@ namespace GenericFanSite.Controllers
         {
             PasswordVM model = new()
             {
-                id = id
+                AppUserId = id
             };
             return View(model);
         }
@@ -136,7 +135,7 @@ namespace GenericFanSite.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByIdAsync(model.id);
+                var user = await _userManager.FindByIdAsync(model.AppUserId);
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var result = await _userManager.ResetPasswordAsync(user, token, model.Password);
                 if (result.Succeeded)

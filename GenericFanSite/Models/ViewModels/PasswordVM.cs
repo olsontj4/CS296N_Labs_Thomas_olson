@@ -4,7 +4,7 @@ namespace GenericFanSite.Models
 {
     public class PasswordVM
     {
-        public string id { get; set; }
+        public string? AppUserId { get; set; }
         [Required(ErrorMessage = "Please enter a password.")]
         [DataType(DataType.Password)]
         [StringLength(255)]
